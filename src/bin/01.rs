@@ -1,29 +1,26 @@
-use std::collections::BinaryHeap;
 use std::collections::HashMap;
 
 advent_of_code::solution!(1);
 
 pub fn part_one(input: &str) -> Option<u32> {
-    let mut left_col: BinaryHeap<u32> = BinaryHeap::new();
-    let mut right_col: BinaryHeap<u32> = BinaryHeap::new();
+    let mut left_col: Vec<u32> = Vec::new();
+    let mut right_col: Vec<u32> = Vec::new();
     input.lines().for_each(|line| {
         let (c1, c2) = line.split_once("   ").unwrap();
         left_col.push(c1.parse::<u32>().unwrap());
         right_col.push(c2.parse::<u32>().unwrap());
     });
 
-    let mut sum: u32 = 0;
-    for _ in 0..left_col.len() {
-        let c1 = left_col.pop().unwrap();
-        let c2 = right_col.pop().unwrap();
-        sum += c1.abs_diff(c2);
-    }
-    Some(sum)
+    left_col.sort_unstable();
+    right_col.sort_unstable();
+
+    Some( left_col.into_iter().zip(right_col).map(|(a,b)| a.abs_diff(b)).sum())
 }
 
 pub fn part_two(input: &str) -> Option<u32> {
     let mut left_col: Vec<u32> = Vec::new();
     let mut right_col: HashMap<u32, u32> = HashMap::new();
+
     input.lines().for_each(|line| {
         let (c1, c2) = line.split_once("   ").unwrap();
         left_col.push(c1.parse::<u32>().unwrap());
