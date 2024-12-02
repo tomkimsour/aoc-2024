@@ -14,7 +14,13 @@ pub fn part_one(input: &str) -> Option<u32> {
     left_col.sort_unstable();
     right_col.sort_unstable();
 
-    Some( left_col.into_iter().zip(right_col).map(|(a,b)| a.abs_diff(b)).sum())
+    Some(
+        left_col
+            .into_iter()
+            .zip(right_col)
+            .map(|(a, b)| a.abs_diff(b))
+            .sum(),
+    )
 }
 
 pub fn part_two(input: &str) -> Option<u32> {
