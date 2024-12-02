@@ -1,19 +1,15 @@
-use itertools::any;
-
 advent_of_code::solution!(2);
 
-fn is_ordered(test_input: Vec<i32>) -> bool{
-    test_input.windows(2).all(|w| w[0] <= w[1]) ||
-    test_input.windows(2).all(|w| w[0] >= w[1])
-
+fn is_ordered(test_input: Vec<i32>) -> bool {
+    test_input.windows(2).all(|w| w[0] <= w[1]) || test_input.windows(2).all(|w| w[0] >= w[1])
 }
 #[allow(dead_code)]
-fn is_valid( mut test_input: Vec<i32>) -> bool {
+fn is_valid(mut test_input: Vec<i32>) -> bool {
     if is_ordered(test_input.clone()) {
         test_input.sort_unstable();
-        return test_input.windows(2).all(|w|{
-            (1..4).contains( &(w[1] - w[0]))
-        })
+        return test_input
+            .windows(2)
+            .all(|w| (1..4).contains(&(w[1] - w[0])));
     }
     false
 }
@@ -26,7 +22,7 @@ pub fn part_one(input: &str) -> Option<u32> {
                 .split_whitespace()
                 .map(|n| n.parse::<i32>().unwrap())
                 .collect::<Vec<i32>>();
-            is_valid(values )
+            is_valid(values)
         })
         .filter(|&x| x)
         .count();
@@ -43,11 +39,12 @@ pub fn part_two(input: &str) -> Option<u32> {
                 .split_whitespace()
                 .map(|n| n.parse::<i32>().unwrap())
                 .collect::<Vec<i32>>();
-            is_valid(values.clone()) || (0..values.len()).any(|i| {
-                let mut values_copy = values.clone();
-                values_copy.remove(i);
-                is_valid(values_copy)})
-
+            is_valid(values.clone())
+                || (0..values.len()).any(|i| {
+                    let mut values_copy = values.clone();
+                    values_copy.remove(i);
+                    is_valid(values_copy)
+                })
         })
         .filter(|&x| x)
         .count();
