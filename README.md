@@ -24,7 +24,6 @@ Solutions for [Advent of Code](https://adventofcode.com/) in [Rust](https://www.
 
 **Total: 0.15ms**
 
-<!--- benchmarking table --->
 
 ---
 
