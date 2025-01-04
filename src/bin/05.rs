@@ -1,5 +1,5 @@
 advent_of_code::solution!(5);
-use std::collections::HashMap;
+use std::{collections::HashMap, thread::current};
 
 pub fn parse_input(input: &str) -> (impl Iterator<Item = (u32, u32)> + '_, Vec<Vec<u32>>) {
     let (ordering_rules, updates) = input.split_once("\n\n").unwrap();
@@ -62,9 +62,48 @@ pub fn part_one(input: &str) -> Option<u32> {
     Some(res)
 }
 
+/**
+* @brief Push the bubble value to the end of the input vector
+**/
+pub fn bubble_value<T : Clone>(mut current_vector: Vec<T>, bubble_value_index: usize) -> Vec<T>{
+    for index in bubble_value_index..current_vector.len() -2{
+        current_vector.swap(index, index+1);
+    }
+    current_vector
+}
+
+pub fn sort_non_valid_array(update_line: Vec<u32>, normal_hashmap: HashMap<u32, Vec<u32>>) -> Vec<u32>{
+    update_line.iter().map(|val|
+        {
+            reverse_hashmap.
+        }
+    )
+
+}
+
 pub fn part_two(input: &str) -> Option<u32> {
     let (ordering_rule, update) = parse_input(input);
-    None
+    let mut reverse_hashmap: HashMap<u32, Vec<u32>> = HashMap::new();
+    let mut normal_hashmap: HashMap<u32, Vec<u32>> = HashMap::new();
+    for (left, right) in ordering_rule {
+        reverse_hashmap
+            .entry(right)
+            .and_modify(|all_previous_values| all_previous_values.push(left))
+            .or_insert(vec![left]);
+        normal_hashmap
+            .entry(left)
+            .and_modify(|all_previous_values| all_previous_values.push(right))
+            .or_insert(vec![right]);
+    }
+    let mut res = 0;
+    for mut update_info in update {
+        if !verify_update_line(update_info.clone(), reverse_hashmap.clone()) {
+            update_info = sort_non_valid_array(update_info.clone(),normal_hashmap.clone());
+            let middle_page = find_middle_value::<u32>(&update_info);
+            res += middle_page;
+        }
+    }
+    Some(res)
 }
 
 #[cfg(test)]
