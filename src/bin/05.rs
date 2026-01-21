@@ -65,20 +65,36 @@ pub fn part_one(input: &str) -> Option<u32> {
 /**
 * @brief Push the bubble value to the end of the input vector
 **/
-pub fn bubble_value<T : Clone>(mut current_vector: Vec<T>, bubble_value_index: usize) -> Vec<T>{
-    for index in bubble_value_index..current_vector.len() -2{
-        current_vector.swap(index, index+1);
+pub fn bubble_value<T: Clone>(mut current_vector: Vec<T>, bubble_value_index: usize) -> Vec<T> {
+    for index in bubble_value_index..current_vector.len() - 2 {
+        current_vector.swap(index, index + 1);
     }
     current_vector
 }
 
-pub fn sort_non_valid_array(update_line: Vec<u32>, normal_hashmap: HashMap<u32, Vec<u32>>) -> Vec<u32>{
-    update_line.iter().map(|val|
-        {
-            reverse_hashmap.
+pub fn sort_non_valid_array(
+    mut update_line: Vec<u32>,
+    reverse_hashmap: HashMap<u32, Vec<u32>>,
+) -> Option<Vec<u32>> {
+    let mut updated_update_line: Vec<u32> = update_line.clone();
+    update_line.iter().enumerate().map(|(index, current_page)| {
+        // It's true if the value associated to the left of the map doesn't exist in the right
+        // member of the update_line
+        let mut right_member_update_line = updated_update_line.split_off(index);
+        if reverse_hashmap.contains_key(&current_page) {
+            for (index, right_member_update_page) in right_member_update_line.iter().enumerate() {
+                if !reverse_hashmap
+                    .get(&current_page)
+                    .unwrap()
+                    .contains(right_member_update_page)
+                {
+                 right_member_update_line = bubble_value::<u32>(right_member_update_line, index);
+                }
+            }
         }
-    )
-
+        updated_update_line.append(right_member_update_line);
+    });
+    None
 }
 
 pub fn part_two(input: &str) -> Option<u32> {
@@ -98,7 +114,7 @@ pub fn part_two(input: &str) -> Option<u32> {
     let mut res = 0;
     for mut update_info in update {
         if !verify_update_line(update_info.clone(), reverse_hashmap.clone()) {
-            update_info = sort_non_valid_array(update_info.clone(),normal_hashmap.clone());
+            update_info = sort_non_valid_array(update_info.clone(), normal_hashmap.clone());
             let middle_page = find_middle_value::<u32>(&update_info);
             res += middle_page;
         }
